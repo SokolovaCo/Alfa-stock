@@ -40,7 +40,11 @@ bool query::execute()
 
 tstring query::toString()
 {
-    tstring query_string;
+    tstring query_string, db_string;
+
+	db_string =  _T(" `");
+	db_string += _DB_;
+	db_string += _T("`.`");
 
     switch (method_)
     {
@@ -58,7 +62,7 @@ tstring query::toString()
             // small hack, we no need new variable
             if (!need_comma) query_string += _T("*");
 
-            query_string += _T(" FROM `") + table_->getName() + _T('`');
+            query_string += _T(" FROM") + db_string + table_->getName() + _T('`');
         }
         break;
 
