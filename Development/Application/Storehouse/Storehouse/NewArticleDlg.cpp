@@ -5,7 +5,9 @@
 #include "Storehouse.h"
 #include "NewArticleDlg.h"
 #include "afxdialogex.h"
+#include "TablesLoader.h"
 
+extern TableLoader glob_TableLoader;
 
 
 using namespace mysql;
@@ -17,6 +19,8 @@ IMPLEMENT_DYNAMIC(NewArticleDlg, CDialogEx)
 
 NewArticleDlg::NewArticleDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(NewArticleDlg::IDD, pParent)
+	, m_needChangeSize(true)
+	, m_needChangePrice(true)
 {
 
 }
@@ -40,6 +44,8 @@ BEGIN_MESSAGE_MAP(NewArticleDlg, CDialogEx)
 	ON_CBN_SELCHANGE(IDC_NA_COMBO_SUBTYPE, &NewArticleDlg::OnCbnSelchangeNaComboSubtype)
 	ON_CBN_SELCHANGE(IDC_NA_COMBO_FIRM, &NewArticleDlg::OnCbnSelchangeNaComboFirm)
 	ON_CBN_SELCHANGE(IDC_NA_COMBO_UNIT, &NewArticleDlg::OnCbnSelchangeNaComboUnit)
+	ON_EN_CHANGE(IDC_NA_EDIT_SIZE, &NewArticleDlg::OnEnChangeNaEditSize)
+	ON_EN_CHANGE(IDC_NA_EDIT_PRICE, &NewArticleDlg::OnEnChangeNaEditPrice)
 END_MESSAGE_MAP()
 
 
@@ -48,19 +54,34 @@ END_MESSAGE_MAP()
 
 void NewArticleDlg::OnCbnSelchangeNaComboType()
 {
+	m_comboSubtype.ResetContent();
+	m_comboSubtype.AddString(_T("--Другой--"));
+
 	if(!m_comboType.GetCurSel())
 		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(TRUE);
 	else
+	{
 		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(FALSE);
+
+		unsigned curSel = m_comboType.GetCurSel();
+		if(curSel - 1 < glob_TableLoader.m_tableType.size())
+		{
+			for (auto it = glob_TableLoader.m_tableSubtype.begin(), end = glob_TableLoader.m_tableSubtype.end(); it != end; ++it)
+			{
+				if(it->id_type == glob_TableLoader.m_tableType[curSel - 1].id)
+					m_comboSubtype.AddString( it->name.data() );
+			}
+		}
+	}
 }
 
 
 void NewArticleDlg::OnCbnSelchangeNaComboSubtype()
 {
 	if(!m_comboSubtype.GetCurSel())
-		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(TRUE);
+		GetDlgItem(IDC_NA_EDIT_SUBTYPE)->ShowWindow(TRUE);
 	else
-		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(FALSE);
+		GetDlgItem(IDC_NA_EDIT_SUBTYPE)->ShowWindow(FALSE);
 }
 
 
@@ -86,26 +107,58 @@ BOOL NewArticleDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	LoadData(&m_comboType, _T("Type"), _T("type"));
-	LoadData(&m_comboSubtype, _T("Subtype"), _T("subtype"));
-	LoadData(&m_comboFirm, _T("Firm"), _T("firm"));
-	LoadData(&m_comboUnit, _T("Unit"), _T("unit"));
+	glob_TableLoader.LoadTableType(&m_comboType);
+	glob_TableLoader.LoadTableSubtype();
+	glob_TableLoader.LoadTableFirm(&m_comboFirm);
+	glob_TableLoader.LoadTableUnit(&m_comboUnit);
+	glob_TableLoader.LoadTableArticle();
 
 	return TRUE;  
 }
 
 
-void NewArticleDlg::LoadData(CComboBox *cb, tstring tableName, tstring fieldName)
+
+
+
+void NewArticleDlg::OnEnChangeNaEditSize()
 {
-	cb->Clear();
-	cb->AddString(_T("--Другой--"));
-
-	table t( tableName, table::header_type(fieldName) );
-	t.load();
-
-	for (auto it = t.begin(), end = t.end(); it != end; ++it)
+	if(m_needChangeSize)
 	{
-		table::row_type r = *it;
-		cb->AddString( r[0].any_value< tstring >().data() );
+		m_needChangeSize = false;
+
+		CheckEdit(IDC_NA_EDIT_SIZE);
 	}
+
+	m_needChangeSize = true;
+}
+
+
+
+void NewArticleDlg::OnEnChangeNaEditPrice()
+{
+	if(m_needChangePrice)
+	{
+		m_needChangePrice = false;
+
+		CheckEdit(IDC_NA_EDIT_PRICE);
+	}
+
+	m_needChangePrice = true;
+}
+
+
+void NewArticleDlg::CheckEdit(UINT ID)
+{
+	CString afterWndStr, beforeWndStr;
+	GetDlgItem(ID)->GetWindowText(afterWndStr);
+	beforeWndStr = afterWndStr;
+
+	for(int i = 0; i < beforeWndStr.GetLength(); i++)
+	{
+		if((beforeWndStr[i] < L'0' || beforeWndStr[i] > L'9') && beforeWndStr[i] != L',' && beforeWndStr[i] != L'.')
+			beforeWndStr.Remove(beforeWndStr[i]);
+	}
+
+	if(afterWndStr != beforeWndStr)
+		GetDlgItem(ID)->SetWindowText(beforeWndStr);
 }

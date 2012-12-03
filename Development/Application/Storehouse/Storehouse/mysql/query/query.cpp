@@ -68,7 +68,7 @@ tstring query::toString()
 
     case insert:
         {
-            query_string = _T("INSERT INTO `") + table_->getName() + _T("` ");
+            query_string = _T("INSERT INTO") + db_string + table_->getName() + _T("` ");
 
             bool need_bracket(true);
             bool need_comma(false);
@@ -98,7 +98,7 @@ tstring query::toString()
 
     case update:
         {
-            query_string = _T("UPDATE `") + table_->getName() + _T("` SET");
+            query_string = _T("UPDATE") + db_string + table_->getName() + _T("` SET");
 
             auto it = table_->begin()->begin();
 
@@ -115,7 +115,7 @@ tstring query::toString()
 
     case delete_:
         {
-            query_string = _T("DELETE FROM `") + table_->getName() + _T('`');
+            query_string = _T("DELETE FROM") + db_string + table_->getName() + _T('`');
         }
         break;
     }

@@ -104,6 +104,7 @@ BOOL mysql_impl::isConnected()
     return FALSE;
 }
 
+
 table::content_type mysql_impl::execute_query_select( const tstring& query_string )
 {
     if (!isConnected())

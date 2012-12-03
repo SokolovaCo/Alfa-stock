@@ -99,10 +99,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="res\add.bmp" />
+    <None Include="res\add.ico" />
+    <None Include="res\add.png" />
+    <None Include="res\bitmap1.bmp" />
     <None Include="res\Storehouse.ico" />
     <None Include="res\Storehouse.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Article.h" />
+    <ClInclude Include="DeliveryDlg.h" />
+    <ClInclude Include="Director.h" />
+    <ClInclude Include="DSModalContainer.h" />
+    <ClInclude Include="DSTable.h" />
     <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="mysql\mysql.hpp" />
     <ClInclude Include="mysql\mysql_settings.hpp" />
@@ -111,13 +120,23 @@
     <ClInclude Include="mysql\table\table.hpp" />
     <ClInclude Include="NAModalContainer.h" />
     <ClInclude Include="NewArticleDlg.h" />
+    <ClInclude Include="NewSRDlg.h" />
+    <ClInclude Include="Place.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ShipmentDlg.h" />
+    <ClInclude Include="SImpleTable.h" />
+    <ClInclude Include="SRTable.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Store.h" />
     <ClInclude Include="Storehouse.h" />
     <ClInclude Include="StorehouseDlg.h" />
+    <ClInclude Include="subtype.h" />
+    <ClInclude Include="TablesLoader.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DeliveryDlg.cpp" />
+    <ClCompile Include="DSModalContainer.cpp" />
     <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="mysql\mysql.cpp" />
     <ClCompile Include="mysql\query\filter\filter.cpp" />
@@ -125,12 +144,15 @@
     <ClCompile Include="mysql\table\table.cpp" />
     <ClCompile Include="NAModalContainer.cpp" />
     <ClCompile Include="NewArticleDlg.cpp" />
+    <ClCompile Include="NewSRDlg.cpp" />
+    <ClCompile Include="ShipmentDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Storehouse.cpp" />
     <ClCompile Include="StorehouseDlg.cpp" />
+    <ClCompile Include="TablesLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Storehouse.rc" />

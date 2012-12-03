@@ -52,33 +52,32 @@ void LoginDlg::OnSize(UINT nType, int cx, int cy)
 		int offset = 5;
 
 		GetDlgItem(IDC_IP)->GetClientRect(rc);
-		GetDlgItem(IDC_IP)->MoveWindow(cx / 2 - rc.Width() / 2, cy / 2 - rc.Height() * 2 - offset * 1.5, rc.Width(), rc.Height());
+		GetDlgItem(IDC_IP)->MoveWindow(cx / 2 - rc.Width() / 2, (int)(cy / 2 - rc.Height() * 2 - offset * 1.5), rc.Width(), rc.Height());
 
 		int editWidth = rc.Width();
 
 		GetDlgItem(IDC_ST_IP)->GetClientRect(staticRc);
-		GetDlgItem(IDC_ST_IP)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2, cy / 2 - rc.Height() * 2 - offset * 1.5, staticRc.Width(), rc.Height());
+		GetDlgItem(IDC_ST_IP)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2, (int)(cy / 2 - rc.Height() * 2 - offset * 1.5), staticRc.Width(), rc.Height());
 
 		GetDlgItem(IDC_LOGIN)->GetClientRect(rc);
-		GetDlgItem(IDC_LOGIN)->MoveWindow(cx / 2 - rc.Width() / 2, cy / 2 - rc.Height() - offset * 0.5, rc.Width(), rc.Height());
+		GetDlgItem(IDC_LOGIN)->MoveWindow(cx / 2 - rc.Width() / 2, (int)(cy / 2 - rc.Height() - offset * 0.5), rc.Width(), rc.Height());
 
 		GetDlgItem(IDC_ST_LOGIN)->GetClientRect(staticRc);
-		GetDlgItem(IDC_ST_LOGIN)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2,cy / 2 - rc.Height() - offset * 0.5, staticRc.Width(), rc.Height());
+		GetDlgItem(IDC_ST_LOGIN)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2, (int)(cy / 2 - rc.Height() - offset * 0.5), staticRc.Width(), rc.Height());
 
 
 		GetDlgItem(IDC_PASS)->GetClientRect(rc);
-		GetDlgItem(IDC_PASS)->MoveWindow(cx / 2 - rc.Width() / 2, cy / 2 +  offset * 0.5, rc.Width(), rc.Height());
+		GetDlgItem(IDC_PASS)->MoveWindow(cx / 2 - rc.Width() / 2, (int)(cy / 2 +  offset * 0.5), rc.Width(), rc.Height());
 
 		GetDlgItem(IDC_ST_PASS)->GetClientRect(staticRc);
-		GetDlgItem(IDC_ST_PASS)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2,cy / 2 +  offset * 0.5, staticRc.Width(), rc.Height());
+		GetDlgItem(IDC_ST_PASS)->MoveWindow(cx / 2 - staticRc.Width() - editWidth / 2, (int)(cy / 2 +  offset * 0.5), staticRc.Width(), rc.Height());
 
 		
-
 		GetDlgItem(IDOK)->GetClientRect(rc);
-		GetDlgItem(IDOK)->MoveWindow(cx / 2 - editWidth / 2, cy / 2 + rc.Height() + offset * 1.5, rc.Width(), rc.Height());
+		GetDlgItem(IDOK)->MoveWindow(cx / 2 - editWidth / 2, (int)(cy / 2 + rc.Height() + offset * 1.5), rc.Width(), rc.Height());
 
 		GetDlgItem(IDCANCEL)->GetClientRect(rc);
-		GetDlgItem(IDCANCEL)->MoveWindow(cx / 2 + editWidth / 2 - rc.Width(), cy / 2 + rc.Height() + offset * 1.5, rc.Width(), rc.Height());
+		GetDlgItem(IDCANCEL)->MoveWindow(cx / 2 + editWidth / 2 - rc.Width(), (int)(cy / 2 + rc.Height() + offset * 1.5), rc.Width(), rc.Height());
 	}
 }
 
@@ -96,16 +95,13 @@ void LoginDlg::OnBnClickedOk()
 	if (mysql::mysql::instance().connect( tstring(ip), _ODBC_, _DB_, tstring(user), tstring(pass) ))
 		::SendMessage(GetParent()->GetSafeHwnd(), WM_LOGIN, 0, 0);
 	else
-		MessageBox(L"Неверная пара логин-пароль", L"База данных", MB_ICONWARNING);
-
-	//CDialogEx::OnOK();
+		MessageBox(L"Неверная пара логин-пароль, или не запущен MySQL сервер.", L"База данных", MB_ICONWARNING);
 }
 
 
 void LoginDlg::OnBnClickedCancel()
 {
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_CLOSE, 0, 0);
-	//CDialogEx::OnCancel();
 }
 
 

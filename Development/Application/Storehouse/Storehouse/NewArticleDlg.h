@@ -1,9 +1,6 @@
 #pragma once
 #include "afxwin.h"
 
-#include "mysql/mysql.hpp"
-#include "mysql/query/filter/filter.hpp"
-
 // диалоговое окно NewArticleDlg
 
 class NewArticleDlg : public CDialogEx
@@ -33,6 +30,16 @@ public:
 	CComboBox m_comboSubtype;
 	CComboBox m_comboUnit;
 
-	void LoadData(CComboBox *cb, tstring tableName, tstring fieldName);
+private:
+
+	bool m_needChangeSize;
+	bool m_needChangePrice;
+
+	void CheckEdit(UINT ID);
+
+public:
+	afx_msg void OnEnChangeNaEditSize();
+	afx_msg void OnEnChangeNaEditPrice();
+
 };
 

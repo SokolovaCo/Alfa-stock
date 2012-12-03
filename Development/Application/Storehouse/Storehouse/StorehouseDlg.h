@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "NAModalContainer.h"
+
 #include "LoginDlg.h"
 
 // диалоговое окно CStorehouseDlg
@@ -35,4 +35,8 @@ protected:
 
 	LoginDlg m_loginDlg;
 	HRESULT onLogin(WPARAM wParam, LPARAM lParam);
+
+	CMenu m_menu;
+
+	void LoadPlaces();
 };

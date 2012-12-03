@@ -26,11 +26,17 @@
     <Filter Include="main">
       <UniqueIdentifier>{4cff336e-83d9-4198-ab06-599446ed3fab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="article">
-      <UniqueIdentifier>{93f21bbb-03e6-4466-aa51-276641b97b2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="res&amp;precompiller">
       <UniqueIdentifier>{233e215e-5db9-4564-87d3-1248ecfe1893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entity">
+      <UniqueIdentifier>{f74929ec-20dc-479a-8e9f-1735118e4a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="new_article">
+      <UniqueIdentifier>{93f21bbb-03e6-4466-aa51-276641b97b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="delivery_shipment">
+      <UniqueIdentifier>{d431b084-b91c-4a91-a95a-eb63d1c227e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +45,18 @@
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="res\Storehouse.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\add.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\add.png">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\bitmap1.bmp">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="res\add.bmp">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>
@@ -68,10 +86,10 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="NAModalContainer.h">
-      <Filter>article</Filter>
+      <Filter>new_article</Filter>
     </ClInclude>
     <ClInclude Include="NewArticleDlg.h">
-      <Filter>article</Filter>
+      <Filter>new_article</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>res&amp;precompiller</Filter>
@@ -82,6 +100,41 @@
     <ClInclude Include="targetver.h">
       <Filter>res&amp;precompiller</Filter>
     </ClInclude>
+    <ClInclude Include="subtype.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="SImpleTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Article.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="DSModalContainer.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="ShipmentDlg.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="DeliveryDlg.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Place.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Store.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="NewSRDlg.h" />
+    <ClInclude Include="SRTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Director.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="DSTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="TablesLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mysql\mysql.cpp">
@@ -106,14 +159,25 @@
       <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="NAModalContainer.cpp">
-      <Filter>article</Filter>
+      <Filter>new_article</Filter>
     </ClCompile>
     <ClCompile Include="NewArticleDlg.cpp">
-      <Filter>article</Filter>
+      <Filter>new_article</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>res&amp;precompiller</Filter>
     </ClCompile>
+    <ClCompile Include="DSModalContainer.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="ShipmentDlg.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="DeliveryDlg.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="NewSRDlg.cpp" />
+    <ClCompile Include="TablesLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Storehouse.rc">

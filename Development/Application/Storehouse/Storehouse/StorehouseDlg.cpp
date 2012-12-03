@@ -7,6 +7,11 @@
 #include "StorehouseDlg.h"
 #include "afxdialogex.h"
 
+#include "NAModalContainer.h"
+#include "DSModalContainer.h"
+
+//#include "TablesLoader.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -153,19 +158,59 @@ void CStorehouseDlg::OnHelpClicked()
 // 
 // 	abd.DoModal();
 
-	NAModalContainer naModal;
-	naModal.DoModal();
+// 	NAModalContainer naModal;
+// 	naModal.DoModal();
+
+	DSModalContainer dsModal;
+	dsModal.SetMode(DM_DELIVERY);
+	dsModal.DoModal();
+	
 }
 
 HRESULT CStorehouseDlg::onLogin(WPARAM wParam, LPARAM lParam)
 {
-	CMenu menu;
-
-	menu.LoadMenu(IDR_MAIN_MENU);
-	this->SetMenu(&menu);
+	m_menu.LoadMenu(IDR_MAIN_MENU);
+	this->SetMenu(&m_menu);
 	
 	m_loginDlg.ShowWindow(FALSE);
 	m_loginDlg.MoveWindow(0,0,0,0);
 
+	LoadPlaces();
+
 	return 0;
+}
+
+
+void CStorehouseDlg::LoadPlaces()
+{
+	mysql::table t( _T("Place"), mysql::table::header_type(_T("id_place")) | _T("line") | _T("point"));
+	t.load();
+
+	if(t.empty())	// если например первый запуск и таблца пустая.
+	{
+		//
+		//загрузить из файла 
+		//
+
+		//Допустим, у нас загрузился массив 5 линий 20 мест в каждой
+
+		int counter = 0;
+		for(int i = 0; i < 5; i++)
+			for(int j = 0; j < 20; j++)
+			{
+				counter++;
+
+				mysql::table::content_type content;
+				mysql::table::row_type     row;
+
+				row | counter | i | j;
+				content.push_back( row );
+				t.setContent( std::move(content) );
+
+				if (!t.save_insert())
+				{
+					long b = 0;
+				}
+			}
+	}
 }
