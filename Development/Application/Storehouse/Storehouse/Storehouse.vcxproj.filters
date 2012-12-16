@@ -38,9 +38,14 @@
     <Filter Include="delivery_shipment">
       <UniqueIdentifier>{d431b084-b91c-4a91-a95a-eb63d1c227e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="new_sr">
+      <UniqueIdentifier>{3bd93cdc-03ac-4b15-85f5-2998c2b89655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tables_loader">
+      <UniqueIdentifier>{7e4bc18a-e537-478f-a061-0965f79151ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="res\Storehouse.rc2">
       <Filter>Файлы ресурсов</Filter>
     </None>
@@ -76,20 +81,65 @@
     <ClInclude Include="mysql\query\filter\filter.hpp">
       <Filter>mysql\query\filter</Filter>
     </ClInclude>
-    <ClInclude Include="Storehouse.h">
+    <ClInclude Include="application\Storehouse.h">
       <Filter>application</Filter>
     </ClInclude>
-    <ClInclude Include="LoginDlg.h">
+    <ClInclude Include="delivery_shipment\DeliveryDlg.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="delivery_shipment\DSModalContainer.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="delivery_shipment\ShipmentDlg.h">
+      <Filter>delivery_shipment</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\Article.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\Director.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\DSTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\Place.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\SImpleTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\SRTable.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\Store.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity\subtype.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="login\LoginDlg.h">
       <Filter>login</Filter>
     </ClInclude>
-    <ClInclude Include="StorehouseDlg.h">
+    <ClInclude Include="main\storehouse_settings.h">
       <Filter>main</Filter>
     </ClInclude>
-    <ClInclude Include="NAModalContainer.h">
+    <ClInclude Include="main\StorehouseDlg.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="new_article\NAModalContainer.h">
       <Filter>new_article</Filter>
     </ClInclude>
-    <ClInclude Include="NewArticleDlg.h">
+    <ClInclude Include="new_article\NewArticleDlg.h">
       <Filter>new_article</Filter>
+    </ClInclude>
+    <ClInclude Include="new_sr\NewSRDlg.h">
+      <Filter>new_sr</Filter>
+    </ClInclude>
+    <ClInclude Include="new_sr\NSRModalContainer.h">
+      <Filter>new_sr</Filter>
+    </ClInclude>
+    <ClInclude Include="tables_loader\TablesLoader.h">
+      <Filter>tables_loader</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>res&amp;precompiller</Filter>
@@ -100,41 +150,6 @@
     <ClInclude Include="targetver.h">
       <Filter>res&amp;precompiller</Filter>
     </ClInclude>
-    <ClInclude Include="subtype.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="SImpleTable.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Article.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="DSModalContainer.h">
-      <Filter>delivery_shipment</Filter>
-    </ClInclude>
-    <ClInclude Include="ShipmentDlg.h">
-      <Filter>delivery_shipment</Filter>
-    </ClInclude>
-    <ClInclude Include="DeliveryDlg.h">
-      <Filter>delivery_shipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Place.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Store.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="NewSRDlg.h" />
-    <ClInclude Include="SRTable.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Director.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="DSTable.h">
-      <Filter>entity</Filter>
-    </ClInclude>
-    <ClInclude Include="TablesLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mysql\mysql.cpp">
@@ -149,35 +164,42 @@
     <ClCompile Include="mysql\query\filter\filter.cpp">
       <Filter>mysql\query\filter</Filter>
     </ClCompile>
-    <ClCompile Include="Storehouse.cpp">
+    <ClCompile Include="application\Storehouse.cpp">
       <Filter>application</Filter>
     </ClCompile>
-    <ClCompile Include="LoginDlg.cpp">
+    <ClCompile Include="delivery_shipment\DeliveryDlg.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="delivery_shipment\DSModalContainer.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="delivery_shipment\ShipmentDlg.cpp">
+      <Filter>delivery_shipment</Filter>
+    </ClCompile>
+    <ClCompile Include="login\LoginDlg.cpp">
       <Filter>login</Filter>
     </ClCompile>
-    <ClCompile Include="StorehouseDlg.cpp">
+    <ClCompile Include="main\StorehouseDlg.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="NAModalContainer.cpp">
+    <ClCompile Include="new_article\NAModalContainer.cpp">
       <Filter>new_article</Filter>
     </ClCompile>
-    <ClCompile Include="NewArticleDlg.cpp">
+    <ClCompile Include="new_article\NewArticleDlg.cpp">
       <Filter>new_article</Filter>
+    </ClCompile>
+    <ClCompile Include="new_sr\NewSRDlg.cpp">
+      <Filter>new_sr</Filter>
+    </ClCompile>
+    <ClCompile Include="new_sr\NSRModalContainer.cpp">
+      <Filter>new_sr</Filter>
+    </ClCompile>
+    <ClCompile Include="tables_loader\TablesLoader.cpp">
+      <Filter>tables_loader</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>res&amp;precompiller</Filter>
     </ClCompile>
-    <ClCompile Include="DSModalContainer.cpp">
-      <Filter>delivery_shipment</Filter>
-    </ClCompile>
-    <ClCompile Include="ShipmentDlg.cpp">
-      <Filter>delivery_shipment</Filter>
-    </ClCompile>
-    <ClCompile Include="DeliveryDlg.cpp">
-      <Filter>delivery_shipment</Filter>
-    </ClCompile>
-    <ClCompile Include="NewSRDlg.cpp" />
-    <ClCompile Include="TablesLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Storehouse.rc">
