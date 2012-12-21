@@ -44,6 +44,9 @@
     <Filter Include="tables_loader">
       <UniqueIdentifier>{7e4bc18a-e537-478f-a061-0965f79151ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="View">
+      <UniqueIdentifier>{8676a71c-913d-46a1-a0ff-5848b01fd9ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Storehouse.rc2">
@@ -150,6 +153,9 @@
     <ClInclude Include="targetver.h">
       <Filter>res&amp;precompiller</Filter>
     </ClInclude>
+    <ClInclude Include="view\ViewDlg.h">
+      <Filter>View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mysql\mysql.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>res&amp;precompiller</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ViewDlg.cpp">
+      <Filter>View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

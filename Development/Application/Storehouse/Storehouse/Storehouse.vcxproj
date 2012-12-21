@@ -134,6 +134,7 @@
     <ClInclude Include="entity\subtype.h" />
     <ClInclude Include="tables_loader\TablesLoader.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="view\ViewDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="delivery_shipment\DeliveryDlg.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="application\Storehouse.cpp" />
     <ClCompile Include="main\StorehouseDlg.cpp" />
     <ClCompile Include="tables_loader\TablesLoader.cpp" />
+    <ClCompile Include="view\ViewDlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Storehouse.rc" />

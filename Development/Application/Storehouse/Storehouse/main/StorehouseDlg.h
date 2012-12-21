@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../login/LoginDlg.h"
+#include "afxcmn.h"
 
 // диалоговое окно CStorehouseDlg
 class CStorehouseDlg : public CDialogEx
@@ -34,6 +35,7 @@ protected:
 	afx_msg void OnHelpClicked();
 	afx_msg void OnDeliveryClicked();
 	afx_msg void OnShipmentClicked();
+	afx_msg void OnCloseClicked();
 
 	LoginDlg m_loginDlg;
 	HRESULT onLogin(WPARAM wParam, LPARAM lParam);
@@ -41,4 +43,8 @@ protected:
 	CMenu m_menu;
 
 	void LoadPlaces();
+public:
+
+	CTabCtrl m_mainTab;
+	CDialogEx* m_pTabDialog;
 };

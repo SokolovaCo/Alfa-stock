@@ -97,9 +97,9 @@ void NewArticleDlg::OnCbnSelchangeNaComboFirm()
 void NewArticleDlg::OnCbnSelchangeNaComboUnit()
 {
 	if(!m_comboUnit.GetCurSel())
-		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(TRUE);
+		GetDlgItem(IDC_NA_EDIT_UNIT)->ShowWindow(TRUE);
 	else
-		GetDlgItem(IDC_NA_EDIT_TYPE)->ShowWindow(FALSE);
+		GetDlgItem(IDC_NA_EDIT_UNIT)->ShowWindow(FALSE);
 }
 
 

@@ -155,6 +155,7 @@ table::content_type mysql_impl::execute_query_select( const tstring& query_strin
                 {
                     using namespace boost::gregorian;
                     using namespace boost::posix_time;
+					long b = 0;
                     row_.push_back(
                         ptime(
                             date(

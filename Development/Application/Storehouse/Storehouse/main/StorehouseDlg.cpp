@@ -10,7 +10,7 @@
 //#include "NAModalContainer.h"
 #include "../delivery_shipment/DSModalContainer.h"
 //#include "NSRModalContainer.h"
-
+#include "../view/ViewDlg.h"
 
 //#include "TablesLoader.h"
 
@@ -64,6 +64,7 @@ CStorehouseDlg::CStorehouseDlg(CWnd* pParent /*=NULL*/)
 void CStorehouseDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_MAIN_TAB, m_mainTab);
 }
 
 BEGIN_MESSAGE_MAP(CStorehouseDlg, CDialogEx)
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CStorehouseDlg, CDialogEx)
 	ON_COMMAND(ID_MM_HELP, &OnHelpClicked)
 	ON_COMMAND(ID_MM_DELIVERY, &OnDeliveryClicked)
 	ON_COMMAND(ID_MM_SHIPMENT, &OnShipmentClicked)
+	ON_COMMAND(ID_EXIT, &OnCloseClicked)
 	ON_MESSAGE(WM_LOGIN, &CStorehouseDlg::onLogin)
 
 END_MESSAGE_MAP()
@@ -100,7 +102,7 @@ BOOL CStorehouseDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Крупный значок
 	SetIcon(m_hIcon, FALSE);		// Мелкий значок
 
-	// TODO: добавьте дополнительную инициализацию
+	//ShellExecute(NULL, NULL, L"C:\\Users\\1\\Desktop\\эскизы(1).xls", NULL, NULL, SW_MAXIMIZE );
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -163,12 +165,19 @@ void CStorehouseDlg::OnHelpClicked()
 	abd.DoModal();	
 }
 
+void CStorehouseDlg::OnCloseClicked()
+{
+	ExitProcess(0);
+}
 
 void CStorehouseDlg::OnDeliveryClicked()
 {
 	DSModalContainer dsModal;
 	dsModal.SetMode(DM_DELIVERY);
 	dsModal.DoModal();
+
+	ViewDlg *vd = (ViewDlg*)m_pTabDialog;
+	vd->UpdateListData();
 }
 
 
@@ -177,6 +186,9 @@ void CStorehouseDlg::OnShipmentClicked()
 	DSModalContainer dsModal;
 	dsModal.SetMode(DM_SHIPMENT);
 	dsModal.DoModal();
+
+	ViewDlg *vd = (ViewDlg*)m_pTabDialog;
+	vd->UpdateListData();
 }
 
 HRESULT CStorehouseDlg::onLogin(WPARAM wParam, LPARAM lParam)
@@ -186,6 +198,33 @@ HRESULT CStorehouseDlg::onLogin(WPARAM wParam, LPARAM lParam)
 	
 	m_loginDlg.ShowWindow(FALSE);
 	m_loginDlg.MoveWindow(0,0,0,0);
+
+
+	
+	m_mainTab.InsertItem(0,L"Просмотр");
+	m_mainTab.InsertItem(1,L"Закупка");
+	m_mainTab.InsertItem(2,L"Отгрузка");
+
+
+
+	m_pTabDialog = new ViewDlg();
+	m_pTabDialog->Create(IDD_VIEW_DLG, (CWnd*)&m_mainTab); //параметры: ресурс диалога и родитель
+	
+	CRect rc; 
+
+	m_mainTab.GetWindowRect (&rc); // получаем "рабочую область"
+	m_mainTab.ScreenToClient (&rc); // преобразуем в относительные координаты
+
+	// исключаем область, где отображаются названия закладок:
+	m_mainTab.AdjustRect (FALSE, &rc); 
+
+	// помещаем диалог на место..
+	m_pTabDialog->MoveWindow (&rc);
+
+	// и показываем:
+	m_pTabDialog->ShowWindow ( SW_SHOWNORMAL );
+	m_pTabDialog->UpdateWindow();
+
 
 	LoadPlaces();
 

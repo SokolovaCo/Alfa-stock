@@ -29,12 +29,12 @@ ShipmentDlg::~ShipmentDlg()
 void ShipmentDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_COMBO_ARTICLE, m_comboArticle);
+	DDX_Control(pDX, IDC_SH_COMBO_ARTICLE, m_comboArticle);
 }
 
 
 BEGIN_MESSAGE_MAP(ShipmentDlg, CDialogEx)
-	ON_CBN_SELCHANGE(IDC_COMBO_ARTICLE, &ShipmentDlg::OnCbnSelchangeComboArticle)
+	ON_CBN_SELCHANGE(IDC_SH_COMBO_ARTICLE, &ShipmentDlg::OnCbnSelchangeComboArticle)
 END_MESSAGE_MAP()
 
 
@@ -77,7 +77,7 @@ BOOL ShipmentDlg::OnInitDialog()
 		}
 	}
 
-	CString cStr;
+	CString cStr, tmp1, tmp2;
 
 	std::for_each(m_artsInStore.begin(), m_artsInStore.end(), [&] (ArticlesInStore &aIs)
 	{
@@ -88,7 +88,11 @@ BOOL ShipmentDlg::OnInitDialog()
 
 		if(artIt != glob_TableLoader.m_tableArticle.end())
 		{
-			cStr.Format(_T("%s  %s  %s  %gр."), glob_TableLoader.CompareID_GetName( (long)artIt->id_subtype, &glob_TableLoader.m_tableSubtype). data(), glob_TableLoader.CompareID_GetName( (long)artIt->id_firm, &glob_TableLoader.m_tableFirm).data(), artIt->name.data(), artIt->price);
+			tmp1 = glob_TableLoader.CompareID_GetName( (long)artIt->id_subtype, &glob_TableLoader.m_tableSubtype).data();
+			tmp2 = glob_TableLoader.CompareID_GetName( (long)artIt->id_firm, &glob_TableLoader.m_tableFirm).data();
+
+			cStr.Format(_T("%s  %s  %s  %gр."), tmp1, tmp2, artIt->name.data(), artIt->price);
+			
 			m_comboArticle.AddString(cStr);
 		}
 	});
@@ -100,12 +104,44 @@ BOOL ShipmentDlg::OnInitDialog()
 
 void ShipmentDlg::OnCbnSelchangeComboArticle()
 {
-	if(m_comboArticle.GetCurSel() < m_artsInStore.size())
+	if(m_comboArticle.GetCurSel() < (int)m_artsInStore.size())
 	{
-		CString cStr;
-		cStr.Format(L"%d", m_artsInStore[m_comboArticle.GetCurSel()]);
+		CString cStr, articleFirm, articleName;
 
-		GetDlgItem(IDC_DISPLAY_FULL)->SetWindowText(cStr);
-	}
-		
+		GetDlgItem(IDC_SH_COMBO_ARTICLE)->GetWindowText(cStr);
+		int pos1 = cStr.Find(_T("  "));
+		int pos2 = cStr.Find(_T("  "), pos1 + 2);
+
+		articleFirm = cStr.Mid(pos1 + 2, pos2 - (pos1 + 2));
+		articleName = cStr.Mid(pos2 + 2, cStr.Find(_T("  "), pos2 + 2) - (pos2 + 2));
+
+		auto firmIt = std::find_if(glob_TableLoader.m_tableFirm.begin(), glob_TableLoader.m_tableFirm.end(), [&] (SimpleTable &firm)
+		{
+			return firm.name.data() == articleFirm;
+		});
+
+		if(firmIt != glob_TableLoader.m_tableFirm.end())	// если нашли
+		{
+			//определяем товар (нам нужен его id)
+			auto articleIt = std::find_if(glob_TableLoader.m_tableArticle.begin(), glob_TableLoader.m_tableArticle.end(), [&] (Article &art)
+			{
+				return art.id_firm == firmIt->id && art.name.data() == articleName;
+			});
+
+			if(articleIt != glob_TableLoader.m_tableArticle.end())	// если нашли
+			{
+				auto artsInStoreIt = std::find_if(m_artsInStore.begin(), m_artsInStore.end(), [&] (ArticlesInStore &aIS)
+				{
+					return aIS.id == articleIt->id;
+				});
+
+				if(artsInStoreIt != m_artsInStore.end())
+				{
+					cStr.Format(L"%d", artsInStoreIt->count);
+					GetDlgItem(IDC_SH_DISPLAY_FULL)->SetWindowText(cStr);
+				}
+					
+			}
+		}
+	}	
 }

@@ -126,7 +126,11 @@ void DSModalContainer::AddDSDlg(std::vector<pT> &dlgsContainer)
 		int widthSub = rcMain.Width() - rcChild.Width();
 
 		this->MoveWindow(rcMain.left, rcMain.top, rcChild.Width(), rcMain.Height() + childHeight);
-		dlgsContainer.back()->MoveWindow(rcChild.left, rcChild.Height() * (dlgsContainer.size() - 1) + ( rcGroup.top - rcMain.top - GetSystemMetrics(SM_CYCAPTION) + rcGroup.Height() ), rcChild.Width(), rcChild.Height());
+		
+		if(GetStyle() & WS_CHILD)
+			dlgsContainer.back()->MoveWindow(rcChild.left, rcChild.Height() * (dlgsContainer.size() - 1) + ( rcGroup.top - rcMain.top + rcGroup.Height() ), rcChild.Width(), rcChild.Height());
+		else
+			dlgsContainer.back()->MoveWindow(rcChild.left, rcChild.Height() * (dlgsContainer.size() - 1) + ( rcGroup.top - rcMain.top - GetSystemMetrics(SM_CYCAPTION) + rcGroup.Height() ), rcChild.Width(), rcChild.Height());
 		
 		ScreenToClient(rcGroup);
 		m_groupAgent.MoveWindow(rcGroup.left, rcGroup.top, rcGroup.Width() - widthSub, rcGroup.Height());
@@ -168,17 +172,17 @@ void DSModalContainer::OnBnClickedOk()
 
 	unsigned long long sizeAfter = glob_TableLoader.m_tableStore.size();
 
+	CTime curTime = CTime::GetCurrentTime();
+	//m_currTime.Format(_T("%d-%02d-%02d %02d:%02d:%02d"), curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond());
+	using namespace boost::gregorian;
+	using namespace boost::posix_time;
+	m_currTime =
+		ptime( date(curTime.GetYear(),curTime.GetMonth(),curTime.GetDay()), hours(curTime.GetHour()) + minutes(curTime.GetMinute()) +seconds(curTime.GetSecond()));
+
+
 	if(m_mode == DM_DELIVERY)
 	{
 		glob_TableLoader.LoadTableDelivery();
-
-		CTime curTime = CTime::GetCurrentTime();
-		//m_currTime.Format(_T("%d-%02d-%02d %02d:%02d:%02d"), curTime.GetYear(), curTime.GetMonth(), curTime.GetDay(), curTime.GetHour(), curTime.GetMinute(), curTime.GetSecond());
-		using namespace boost::gregorian;
-		using namespace boost::posix_time;
-		m_currTime =
-			ptime( date(curTime.GetYear(),curTime.GetMonth(),curTime.GetDay()), hours(curTime.GetHour()) + minutes(curTime.GetMinute()) +seconds(curTime.GetSecond()));
-
 
 		std::for_each(m_delDlgsContainer.begin(), m_delDlgsContainer.end(), [&] (PDeliveryDlg pDDlg)
 		{
@@ -251,7 +255,94 @@ void DSModalContainer::OnBnClickedOk()
 	}
 	else if(m_mode == DM_SHIPMENT)
 	{
-		
+		glob_TableLoader.LoadTableShipment();
+
+		std::for_each(m_shipDlgsContainer.begin(), m_shipDlgsContainer.end(), [&] (PShipmentDlg pSDlg)
+		{
+			CString cStr, articleFirm, articleName;
+			long toShipment, tmp;
+
+			pSDlg->GetDlgItem(IDC_SH_EDIT_COUNT)->GetWindowText(cStr);
+			toShipment = _ttoi(cStr);
+
+			pSDlg->GetDlgItem(IDC_SH_DISPLAY_FULL)->GetWindowText(cStr);
+			tmp = _ttoi(cStr);
+			
+			toShipment = min(toShipment, tmp); // на случай если ввели больше, чем есть на самом деле.
+
+
+			pSDlg->GetDlgItem(IDC_SH_COMBO_ARTICLE)->GetWindowText(cStr);
+			int pos1 = cStr.Find(_T("  "));
+			int pos2 = cStr.Find(_T("  "), pos1 + 2);
+
+			articleFirm = cStr.Mid(pos1 + 2, pos2 - (pos1 + 2));
+			articleName = cStr.Mid(pos2 + 2, cStr.Find(_T("  "), pos2 + 2) - (pos2 + 2));
+
+			//определяем фирму (нам нужен id)
+			auto firmIt = std::find_if(glob_TableLoader.m_tableFirm.begin(), glob_TableLoader.m_tableFirm.end(), [&] (SimpleTable &firm)
+			{
+				return firm.name.data() == articleFirm;
+			});
+
+			if(firmIt != glob_TableLoader.m_tableFirm.end())	// если нашли
+			{
+				//определяем товар (нам нужен его id)
+				auto articleIt = std::find_if(glob_TableLoader.m_tableArticle.begin(), glob_TableLoader.m_tableArticle.end(), [&] (Article &art)
+				{
+					return art.id_firm == firmIt->id && art.name.data() == articleName;
+				});
+
+				if(articleIt != glob_TableLoader.m_tableArticle.end())	// если нашли
+				{
+					table tableStore(_T("Storehouse"), 
+						table::header_type(_T("id_item")) | _T("id_article") | _T("id_place") | _T("availability"));
+
+					for(long i = 0; i < toShipment; i++)
+					{
+						auto storeIt = std::find_if(glob_TableLoader.m_tableStore.begin(), glob_TableLoader.m_tableStore.end(), [&] (Store &st)
+						{
+							return st.id_article == articleIt->id && st.availability == true;
+						});
+
+						if(storeIt != glob_TableLoader.m_tableStore.end())
+						{
+							table::content_type content;
+							table::row_type     row;
+							row | storeIt->id_store | storeIt->id_article | storeIt->id_place | 0;
+							content.push_back( row );
+							tableStore.setContent( std::move(content) );
+
+							if(!tableStore.save_update( where(_T("id_item")) = storeIt->id_store))
+							{
+								long b = 0;
+							}
+							else
+							{
+								storeIt->availability = false;
+
+								table tableShipment(__T("Shipment"), 
+									table::header_type(_T("id_shipment")) | _T("date") | _T("id_item") | _T("id_recipient"));
+
+								table::content_type content;
+								table::row_type     row;
+								DSTable dt;
+								dt.datetime = m_currTime;
+
+								row | glob_TableLoader.m_tableShipment.size() + 1 | dt.GetDateTime() | storeIt->id_store | m_currAgentId;
+								content.push_back( row );
+								tableShipment.setContent( std::move(content) );
+
+								if (tableShipment.save_insert())
+									glob_TableLoader.m_tableShipment.push_back( DSTable(glob_TableLoader.m_tableShipment.size() + 1 , m_currTime, storeIt->id_store, m_currAgentId) );
+
+							}
+								
+						}
+					}
+				}
+			}
+			
+		});
 	}
 
 	CDialogEx::OnOK();
@@ -287,6 +378,7 @@ PAStatus DSModalContainer::PutArticle(std::vector<Place>::iterator currPlaceIt, 
 			table::row_type     row;
 			DSTable dt;
 			dt.datetime = m_currTime;
+			tstring tmp = dt.GetDateTime();
 
 			row | glob_TableLoader.m_tableDelivery.size() + 1 | dt.GetDateTime() | glob_TableLoader.m_tableStore.back().id_store | m_currAgentId;
 			content.push_back( row );

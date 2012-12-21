@@ -127,6 +127,8 @@ void TableLoader::LoadTableArticle(CComboBox *cb, bool loadOther)
 	if(m_tableFirm.empty())
 		LoadTableFirm();
 
+	CString tmp1, tmp2;
+
 	LoadData(
 		cb,
 		_T("Article"), 
@@ -137,7 +139,10 @@ void TableLoader::LoadTableArticle(CComboBox *cb, bool loadOther)
 
 			if(cb != NULL && !m_tableSubtype.empty() && !m_tableFirm.empty())
 			{
-				cStr.Format(_T("%s  %s  %s  %gð."), CompareID_GetName( (long)m_tableArticle.back().id_subtype, &m_tableSubtype). data(), CompareID_GetName( (long)m_tableArticle.back().id_firm, &m_tableFirm).data(), m_tableArticle.back().name.data(), m_tableArticle.back().price);
+				tmp1 = CompareID_GetName( (long)m_tableArticle.back().id_subtype, &m_tableSubtype). data();
+				tmp2 = CompareID_GetName( (long)m_tableArticle.back().id_firm, &m_tableFirm).data();
+
+				cStr.Format(_T("%s  %s  %s  %gð."), tmp1, tmp2, m_tableArticle.back().name.data(), m_tableArticle.back().price);
 				cb->AddString(cStr);
 			}
 		},
@@ -157,10 +162,6 @@ void TableLoader::LoadTableStorehouse(CComboBox *cb)
 		[&](CComboBox *cb, table::row_type r)
 		{	
 			m_tableStore.push_back( Store( _ttoi(r[0].any_value<tstring>().data()), r[1].any_value< long >(), r[2].any_value< long >(), r[3].any_value<unsigned char>()) );
-// 			unsigned long long b = m_tableStore.back().id_store;
-// 			long l = m_tableStore.back().availability;
-// 			bool k = m_tableStore.back().availability;
-// 			long s = 0;
 		});
 }
 
@@ -262,7 +263,7 @@ void TableLoader::LoadTableShipment(CComboBox *cb)
 
 	LoadData(
 		cb,
-		_T("Delivery"), 
+		_T("Shipment"), 
 		table::header_type(_T("id_shipment")) | _T("date") | _T("id_item") | _T("id_recipient"),
 		[&](CComboBox *cb, table::row_type r)
 	{	
